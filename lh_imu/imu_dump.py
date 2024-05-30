@@ -2,7 +2,7 @@ import subprocess
 import re
 from datetime import datetime
 
-DONGLE_SERIAL = "8DCB2863B3-DYX"
+DONGLE_SERIAL = "8DCB2863B3-DYX" # Dongle Serial
 EXE_PATH = r"C:\Program Files (x86)\Steam\steamapps\common\SteamVR\tools\lighthouse\bin\win64\lighthouse_console.exe"
 
 def execute_commands(commands, exe_path):
@@ -54,12 +54,12 @@ def main():
                 accel_data.append([accel_x, accel_y, accel_z])
                 print(f"{timestamp} | Gyro (°/s): x={gyro_x}, y={gyro_y}, z={gyro_z} | Accel (m/s²): x={accel_x}, y={accel_y}, z={accel_z}")
 
-        process.communicate()  # プロセスの終了を確認
+        process.communicate()
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
         if process.returncode is None:
-            process.kill()  # プロセスを強制終了
+            process.kill()
 
 if __name__ == "__main__":
     main()
