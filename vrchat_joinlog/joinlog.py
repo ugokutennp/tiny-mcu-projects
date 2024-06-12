@@ -10,6 +10,13 @@ log_dir_path = os.path.join(home_dir, r"AppData\LocalLow\VRChat\VRChat")
 log_file_path = None
 last_position = 0
 startup_time = datetime.now()  # Record the startup time
+enable_logging = False  # Flag to enable/disable logging
+
+# Function to print log messages based on the enable_logging flag
+def log(message):
+    if enable_logging:
+        timestamp = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        print(f"[{timestamp}][Debug] {message}")
 
 # Function to get the latest log file path
 def get_latest_log_file_path():
@@ -28,6 +35,7 @@ def check_for_updates():
     if latest_log_file_path != log_file_path:
         log_file_path = latest_log_file_path
         last_position = 0  # Reset the position when log file changes
+        log(f"New log file detected: {log_file_path}")
         return True
 
     current_modified_time = get_file_last_modified_time(log_file_path)
@@ -36,6 +44,7 @@ def check_for_updates():
 
     if current_modified_time != check_for_updates.last_modified_time:
         check_for_updates.last_modified_time = current_modified_time
+        log(f"Log file has been updated: {log_file_path}")
         return True
     return False
 
@@ -43,8 +52,8 @@ def check_for_updates():
 def extract_player_events(log_lines):
     events = defaultdict(lambda: {"join": [], "left": []})
     for line in log_lines:
-        joined_match = re.match(r"(\d{4}\.\d{2}\.\d{2} \d{2}:\d{2}:\d{2}).*OnPlayerJoined (.+)", line)
-        left_match = re.match(r"(\d{4}\.\d{2}\.\d{2} \d{2}:\d{2}:\d{2}).*OnPlayerLeft (.+)", line)
+        joined_match = re.match(r"(\d{4}\.\d{2}\.\d{2} \d{2}:\d{2}:\d{2}).* \[Behaviour\] OnPlayerJoined (.+)", line)
+        left_match = re.match(r"(\d{4}\.\d{2}\.\d{2} \d{2}:\d{2}:\d{2}).* \[Behaviour\] OnPlayerLeft (.+)", line)
         
         if joined_match:
             timestamp = joined_match.group(1)
@@ -69,11 +78,11 @@ def extract_player_events(log_lines):
 
         if event["join"]:
             join_players = ",".join(event["join"])
-            entries.append(f"{formatted_time} Join : {join_players}")
+            entries.append(f"{formatted_time}[Join] {join_players}")
 
         if event["left"]:
             left_players = ",".join(event["left"])
-            entries.append(f"{formatted_time} Left : {left_players}")
+            entries.append(f"{formatted_time}[Left] {left_players}")
 
     return entries
 
@@ -88,6 +97,8 @@ def read_new_logs():
 
 # Get the latest log file path on startup
 log_file_path = get_latest_log_file_path()
+log("Monitoring start")
+log(f"Initial log file: {log_file_path}")
 
 # Main loop to monitor log file for updates
 while True:
