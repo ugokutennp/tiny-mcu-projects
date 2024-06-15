@@ -10,7 +10,8 @@ log_dir_path = os.path.join(home_dir, r"AppData\LocalLow\VRChat\VRChat")
 log_file_path = None
 last_position = 0
 startup_time = datetime.now()  # Record the startup time
-enable_logging = False  # Flag to enable/disable logging
+enable_logging = False
+  # Flag to enable/disable logging
 
 # Function to print log messages based on the enable_logging flag
 def log(message):
@@ -98,6 +99,7 @@ def read_new_logs():
 # Get the latest log file path on startup
 log_file_path = get_latest_log_file_path()
 log("Monitoring start")
+log(f"Program started at {startup_time}")
 log(f"Initial log file: {log_file_path}")
 
 # Main loop to monitor log file for updates
