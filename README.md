@@ -4,3 +4,9 @@ Use lighthouse_console to dump the device's imu information to obtain angular ve
 
 ## vrchat_joinlog
 Monitor VRChat log files for join and left information.
+
+## SRHandrer
+### SRHandrerPS.bat
+Monitor SRanipal tasks and start them when they disappear
+### SRkill,VRCFT kill
+Kill Tasks
