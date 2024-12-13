@@ -10,3 +10,6 @@ Monitor VRChat log files for join and left information.
 Monitor SRanipal tasks and start them when they disappear
 ### SRKill,VRCFTKill
 Kill Tasks
+
+## vrc_instance_gen
+Generate URL for vrchat instance
