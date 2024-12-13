@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VRChat Instance Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 15px;
+      color: #555;
+      text-align: left;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #007BFF;
+      word-break: break-all;
+    }
+    #result a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+    #result a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>VRChat Instance Generator</h1>
+
+    <label for="userId">User ID:</label>
+    <input type="text" id="userId" placeholder="e.g. usr_00000000_0000_0000_0000_000000000000">
+
+    <label for="worldId">World ID:</label>
+    <input type="text" id="worldId" placeholder="e.g. world_00000000_0000_0000_0000_000000000000">
+
+    <label for="instanceId">Instance ID (Random if blank):</label>
+    <input type="text" id="instanceId" placeholder="e.g. 19656">
+
+    <label for="region">Region :</label>
+    <select id="region">
+      <option value="us">USW</option>
+      <option value="use">USE</option>
+      <option value="eu">EU</option>
+      <option value="jp" selected>JP</option>
+    </select>
+
+    <label for="status">Instance Type:</label>
+    <select id="status">
+      <option value="Public">Public</option>
+      <option value="FriendsPlus" selected>Friends+</option>
+      <option value="Friends">Friends</option>
+      <option value="InvitePlus">Invite+</option>
+      <option value="Invite">Invite</option>
+    </select>
+
+    <button onclick="generateURL()">Generate URL</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function generateURL() {
+      const userId = document.getElementById("userId").value;
+      const worldId = document.getElementById("worldId").value;
+      let instanceId = document.getElementById("instanceId").value;
+      const region = document.getElementById("region").value;
+      const status = document.getElementById("status").value;
+
+      // インスタンスIDが空白の場合、5桁のランダムな数字を生成
+      if (!instanceId) {
+        instanceId = Math.floor(10000 + Math.random() * 90000).toString();
+      }
+
+      let url = "https://vrchat.com/home/launch?worldId=" + worldId + "&instanceId=" + instanceId;
+
+      switch(status) {
+        case "Public":
+          url += `~region(${region})`;
+          break;
+        case "FriendsPlus":
+          url += `~hidden(${userId})~region(${region})`;
+          break;
+        case "Friends":
+          url += `~friends(${userId})~region(${region})`;
+          break;
+        case "InvitePlus":
+          url += `~private(${userId})~canRequestInvite~region(${region})`;
+          break;
+        case "Invite":
+          url += `~private(${userId})~region(${region})`;
+          break;
+      }
+
+      document.getElementById("result").innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
+    }
+  </script>
+
+</body>
+</html>
